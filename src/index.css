@@ -8,8 +8,10 @@
 }
 
 .body {
-  background-color: rgb(190, 240, 190);
-  padding: 45px;
+  background-color: rgb(41, 57, 68);
+  /* padding: 45px; */
+  color: rgb(228, 228, 228);
+  
   font-family: "Poppins";
   
 }

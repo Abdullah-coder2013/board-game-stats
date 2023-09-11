@@ -1,9 +1,11 @@
-import {db} from "../firebase";
-import { collection, getDocs } from 'firebase/firestore/lite';
+import { auth } from "../firebase";
 
 const EntryModal = (props) => {
     const saveDetails = () => {
-        fetch(`https://board-game-518ed-default-rtdb.europe-west1.firebasedatabase.app/${document.getElementById("board-game").value}.json`,{
+        let address = auth.currentUser['email'].split("@")[0];
+        address = address.replace(".", "-");
+        console.log(address);
+        fetch(`https://board-game-518ed-default-rtdb.europe-west1.firebasedatabase.app/${address}.json`,{
             method: 'POST',
             body: JSON.stringify({
                 boardGame: document.getElementById("board-game").value,
@@ -12,6 +14,7 @@ const EntryModal = (props) => {
                 date: document.getElementById("date").value
             })
         })
+        window.location.reload();
     }
     
         
