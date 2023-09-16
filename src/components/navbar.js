@@ -1,12 +1,13 @@
-import { useState } from "react";
+
 import Games from "./gameCenter";
 import { auth } from "../firebase";
 import Authentication from "./login";
 
 const Navbar = (props) => {
 
-    const user = auth.currentUser;
-    console.log(user);
+    const logout = () => {
+        auth.signOut();
+    }
 
     return (
         <nav className="bg-gray-800">
@@ -14,9 +15,9 @@ const Navbar = (props) => {
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="flex-shrink-0">
-                                <svg fill="#FFFFFF" height="55px" width="55px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" 
-            viewBox="0 0 451.816 451.816" xmlSpace="preserve">
-        <path id="XMLID_750_" d="M451.102,83.854L357.446,367.73c-1.171,3.552-3.661,6.439-7.012,8.128c-1.991,1.003-4.142,1.51-6.306,1.51
+                            <svg fill="#FFFFFF" height="55px" width="55px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 451.816 451.816" xmlSpace="preserve">
+                                <path id="XMLID_750_" d="M451.102,83.854L357.446,367.73c-1.171,3.552-3.661,6.439-7.012,8.128c-1.991,1.003-4.142,1.51-6.306,1.51
             c-1.477,0-2.959-0.236-4.4-0.712l-23.427-7.728c-4.721-1.557-7.285-6.646-5.728-11.366c1.557-4.721,6.652-7.285,11.366-5.728
             l19.656,6.484L432.766,81.98L254.237,23.079l-25.332,76.787c-1.558,4.721-6.652,7.284-11.366,5.727
             c-4.721-1.557-7.285-6.646-5.728-11.367l26.576-80.557c2.428-7.347,10.375-11.352,17.72-8.928L442.177,66.13
@@ -54,15 +55,18 @@ const Navbar = (props) => {
             M251.313,394.543h-1.981c-4.971,0-9,4.029-9,9s4.029,9,9,9h1.981c4.971,0,9-4.029,9-9S256.283,394.543,251.313,394.543z
             M219.874,362.027h-1.981c-4.971,0-9,4.029-9,9s4.029,9,9,9h1.981c4.971,0,9-4.029,9-9S224.845,362.027,219.874,362.027z
             M219.873,394.543h-1.981c-4.971,0-9,4.029-9,9s4.029,9,9,9h1.981c4.971,0,9-4.029,9-9S224.844,394.543,219.873,394.543z"/>
-        </svg>
+                            </svg>
                         </div>
                         <div className="flex flex-row">
                             <div className="ml-10 flex space-x-4 items-center">
-                                <Games open={props.open} setOpen={props.setOpen}/>
+                                <Games/>
                                 <div className="">
-                                    {user && <button>Logged in as {user.email.split("@")[0]}</button>}
-                                    {!user && <button onClick={() => {props.setAuths(true)}} className="transition ease-in-out p-1 rounded-xl text-white bg-blue-500 active:bg-blue-700 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300">Login/Sign up</button>}
-                                    {props.auths && <Authentication open={props.auths} setOpen={props.setAuths}/>}
+                                    {props.isLoggedIn && <button>Logged in as {props.currentUser.email.match(".*?(?=@)")[0]}</button>}
+                                    {!props.isLoggedIn && <button onClick={() => { props.setAuths(true) }} className="transition ease-in-out p-1 rounded-xl text-white bg-blue-500 active:bg-blue-700 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300">Login/Sign up</button>}
+                                    {!props.isLoggedIn && <Authentication isLoggedIn={props.isLoggedIn} setIsLoggedIn={props.setIsLoggedIn} />}
+                                </div>
+                                <div>
+                                    <button onClick={e => logout()}>Sign out</button>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +74,7 @@ const Navbar = (props) => {
                 </div>
             </div>
         </nav>
-    
+
     )
 }
 

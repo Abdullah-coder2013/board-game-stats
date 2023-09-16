@@ -11,7 +11,8 @@ const EntryModal = (props) => {
                 boardGame: document.getElementById("board-game").value,
                 players: document.getElementById("player-count").value,
                 points: document.getElementById("points").value,
-                date: document.getElementById("date").value
+                date: document.getElementById("date").value,
+                result: document.getElementById("result").value
             })
         })
         window.location.reload();
@@ -43,6 +44,11 @@ const EntryModal = (props) => {
                     <label>Date: </label>
                     <input type="date" id="date"/>
                     <br/>
+                    <select id="result">
+                        <option value="won" key="Won">Won</option>
+                        <option value="notfirst" key="notFirst">Wasn't the first</option>
+                        <option value="lost" key="lost">Lost</option>
+                    </select>
                     <button className="transition ease-in-out p-1 rounded-xl text-white active:bg-blue-700  bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300" onClick={() => saveDetails()}>Submit</button>
 
                 </div>

@@ -1,24 +1,53 @@
-import { useState } from "react";
-import Authentication from "./components/login";
+import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
-
+import { auth } from "./firebase";
+import Chart from "react-google-charts";
 
 const Homepage = () => {
-    const [open, setOpen] = useState(false);
     const [auths, setAuths] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [currentUser, setCurrentUser] = useState();
+    const [userData, setUserData] = useState();
 
+    let address;
 
+    auth.onAuthStateChanged(async user => {
+        if (user) {
+            setIsLoggedIn(true);
+            setCurrentUser(user);
+        }
+        else {
+            setIsLoggedIn(false);
+            setCurrentUser();
+        }
+    })
+    if (currentUser != null) {
+        address = auth.currentUser['email'].split("@")[0];
+        address = address.replace(".", "-");
+    }
 
+    useEffect(() => {
+        if (currentUser != null) {
+        fetch(`https://board-game-518ed-default-rtdb.europe-west1.firebasedatabase.app/${address}.json`)
+            .then(response => response.json())
+            .then(json => console.log(json))
+        }
+    }, [address, currentUser]);
+    
+
+    if (currentUser != null) {
+        // getData();
+    }
+    console.log(userData);
     return (
         <div>
-            <Navbar open={open} setOpen={setOpen} auths={auths} setAuths={setAuths}/>
+            <Navbar auths={auths} setAuths={setAuths} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
             <div className="p-10">
-                <h1 className="text-6xl font-bold">Homepage</h1>
-                {/* <button onClick={() => {setAuths(true)}} className="transition ease-in-out p-1 rounded-xl text-white bg-blue-500 active:bg-blue-700 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300">Login/Sign up</button> */}
-                {/* {auths && <Authentication open={auths} setOpen={setAuths}/>} */}
+                {currentUser && <h1 className="m-auto text-4xl font-bold">{currentUser.email.match(".*?(?=@)")[0]}'s Statistics:</h1>}
+                {currentUser == null && <h1 className="m-auto text-4xl font-bold">Please Login/Signup to view your statistics</h1>}
                 <br/>
                 <br/>
-                
+                {/* {currentUser && getData()} */}
             </div>
         </div>
     );
