@@ -2,7 +2,7 @@ import { auth } from "../firebase";
 
 const EntryModal = (props) => {
     const saveDetails = () => {
-        let address = auth.currentUser['email'].split("@")[0];
+        let address = props.currentUser['email'].split("@")[0];
         address = address.replace(".", "-");
         console.log(address);
         fetch(`https://board-game-518ed-default-rtdb.europe-west1.firebasedatabase.app/${address}.json`,{
